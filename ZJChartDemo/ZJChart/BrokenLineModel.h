@@ -10,8 +10,11 @@
 
 @interface BrokenLineModel : NSObject
 
-@property(nonatomic, copy) NSString *average;
-@property(nonatomic, copy) NSString *total;
-@property(nonatomic, copy) NSArray *list;
+//y轴数据
+@property(nonatomic, strong) NSArray *yDataArray;
+//x轴数据
+@property(nonatomic, strong) NSArray *xDataArray;
+//总共的点数
+@property(nonatomic, assign) NSInteger totalPointNub;
 
 @end

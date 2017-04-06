@@ -7,7 +7,6 @@
 //
 
 #import "ZJBrokenLineView.h"
-#import "MonthChooseModel.h"
 
 @interface ZJBrokenLineView ()
 
@@ -21,8 +20,6 @@
 @property (nonatomic, assign) CGFloat lineViewHeight;
 
 //代理数据
-/* 月份 */
-@property (nonatomic, strong) NSString *monthString;
 /* 数据源-x轴数据 */
 @property (nonatomic, strong) NSArray *xDataArray;
 
@@ -31,8 +28,8 @@
 
 @property (nonatomic, assign) CGFloat yTotalValue;
 
-/*当月的天数  总共多少个点*/
-@property (nonatomic, assign) NSInteger monthDays;
+/*总共多少个点*/
+@property (nonatomic, assign) NSInteger totalPointNub;
 
 //计算数据
 /* y轴最大数据值 */
@@ -81,7 +78,7 @@ static  CGFloat drawAnimaTime = 1.0;
     
     if (self = [super initWithFrame:frame]) {
         
-        self.backgroundColor = [UIColor orangeColor];
+        self.backgroundColor = [UIColor colorWithRed:90/255.0 green:52/255.0 blue:154/255.0 alpha:1];
         //初始化颜色,间距
         self.coordinatesColor = [UIColor grayColor];
         self.lineColor = [UIColor grayColor];
@@ -142,7 +139,7 @@ static  CGFloat drawAnimaTime = 1.0;
         [_noDataButton setTitle:@"暂无数据" forState:UIControlStateNormal];
         [_noDataButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _noDataButton.titleLabel.font = [UIFont systemFontOfSize:14.7 weight:UIFontWeightLight];
-        _noDataButton.center = CGPointMake(self.width / 2.0, self.height / 2.0);
+        _noDataButton.center = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0);
         [_noDataButton addTarget:self action:@selector(noDataButtonAction) forControlEvents:UIControlEventTouchUpInside];
         _noDataButton.hidden = YES;
         [self addSubview:_noDataButton];
@@ -213,8 +210,6 @@ static  CGFloat drawAnimaTime = 1.0;
   
     }
     
-
-    
 }
 
 - (void)drawBrokenLine {
@@ -234,7 +229,7 @@ static  CGFloat drawAnimaTime = 1.0;
         //绘制折线
         CGFloat pointValue = [self.yDataArray[i] floatValue];
         
-        CGPoint linePoint = CGPointMake(self.lineViewWidth/(_monthDays-1) * i + _bounceX, (1 - (pointValue - self.minYValue) / yValueSpace) *self.lineViewHeight + self.bounceTop);
+        CGPoint linePoint = CGPointMake(self.lineViewWidth/(_totalPointNub-1) * i + _bounceX, (1 - (pointValue - self.minYValue) / yValueSpace) *self.lineViewHeight + self.bounceTop);
         
         if (i == 0) {
             
@@ -253,7 +248,7 @@ static  CGFloat drawAnimaTime = 1.0;
         
             if (self.hasMaxValue == NO) {
                 
-                CFTimeInterval beginTime = drawAnimaTime * i / _monthDays + CACurrentMediaTime();
+                CFTimeInterval beginTime = drawAnimaTime * i / _totalPointNub + CACurrentMediaTime();
                 [self drawArcAtPoint:linePoint value:pointValue beginTime:beginTime isTop:YES];
                 self.hasMaxValue = YES;
             }
@@ -261,7 +256,7 @@ static  CGFloat drawAnimaTime = 1.0;
             
             if (self.hasMinValue == NO) {
                 
-                CFTimeInterval beginTime = drawAnimaTime * i / _monthDays + CACurrentMediaTime();
+                CFTimeInterval beginTime = drawAnimaTime * i / _totalPointNub + CACurrentMediaTime();
                 [self drawArcAtPoint:linePoint value:pointValue beginTime:beginTime isTop:NO];
                 self.hasMinValue = YES;
             }
@@ -270,7 +265,6 @@ static  CGFloat drawAnimaTime = 1.0;
   
     }
     CAShapeLayer *lineChartLayer = [CAShapeLayer layer];
-    //self.lineChartLayer = [CAShapeLayer layer];
     lineChartLayer.path = linePath.CGPath;
     lineChartLayer.strokeColor = [self.lineColor CGColor];
     lineChartLayer.fillColor = [[UIColor clearColor] CGColor];
@@ -413,28 +407,15 @@ static  CGFloat drawAnimaTime = 1.0;
     //更新代理的数据
     BrokenLineModel *brokenLineModel = [self.dataSource yDataModelOfZJBrokenLineView:self];
     
-    self.yDataArray = brokenLineModel.list;
+    self.yDataArray = brokenLineModel.yDataArray;
     //x轴
-    self.monthString = [self.dataSource monthStringOfZJBrokenLineView:self];
-    
-    MonthChooseModel *monthChooseModel = [[MonthChooseModel alloc] init];
-    NSInteger lastDay = [monthChooseModel theNumberOfDaysInMonth:self.monthString];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM"];
-    NSDate *monthDate = [dateFormatter dateFromString:_monthString];
-    [dateFormatter setDateFormat:@"MM"];
-    NSString *month = [dateFormatter stringFromDate:monthDate];
-    self.xDataArray = @[ [NSString stringWithFormat:@"%@/01",month],
-                         [NSString stringWithFormat:@"%@/08",month],
-                         [NSString stringWithFormat:@"%@/15",month],
-                         [NSString stringWithFormat:@"%@/22",month],
-                         [NSString stringWithFormat:@"%@/%ld",month,(long)lastDay]];
-    self.monthDays = lastDay;
+    self.xDataArray = brokenLineModel.xDataArray;
+    self.totalPointNub = brokenLineModel.totalPointNub;
     
     self.hasMinValue = NO;
     self.hasMaxValue = NO;
     //取数据源最大值和最小值
-    
+
     NSArray * sortYDataArray = [self.yDataArray sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         
         if([obj1 floatValue] > [obj2 floatValue]){
@@ -459,10 +440,16 @@ static  CGFloat drawAnimaTime = 1.0;
     self.maxYValue = self.maxDataValue + (self.maxDataValue-self.minDataValue) / 2* self.lineSpacePercent;
     self.minYValue = self.minDataValue - (self.maxDataValue-self.minDataValue) / 2* self.lineSpacePercent;
     
+    
     //计算累计值
-    self.yTotalValue = [brokenLineModel.total floatValue];
+    for (int i = 0 ; i < _yDataArray.count; i++) {
+        
+        CGFloat floatValue = [_yDataArray[i] floatValue];
+        _yTotalValue += floatValue;
+    }
+    CGFloat yAverageValue = _yTotalValue/_yDataArray.count;
 
-    self.leftTitle = [NSString stringWithFormat:@"日均 : %.*f%@",_numbOfFloat,[brokenLineModel.average floatValue],_unitName];
+    self.leftTitle = [NSString stringWithFormat:@"日均 : %.*f%@",_numbOfFloat,yAverageValue,_unitName];
     self.rightTitle = [NSString stringWithFormat:@"累计 : %.*f%@",_numbOfFloat,self.yTotalValue,_unitName];
     //重新计算折线图高度,宽度
     self.lineViewWidth = self.frame.size.width - 2 * self.bounceX;
@@ -507,19 +494,6 @@ static  CGFloat drawAnimaTime = 1.0;
         [self drawBrokenLine];
     }
     
-    
-//    if (self.yTotalValue > 0) {
-//        
-//        //开始画线
-//        [self drawBrokenLine];
-//        //隐藏暂无数据
-//        self.noDataButton.hidden = YES;
-//    }else {
-//        //显示暂无数据
-//        self.noDataButton.hidden = NO;
-//    }
-    
-
 
 }
 

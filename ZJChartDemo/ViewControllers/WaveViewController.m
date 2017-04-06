@@ -7,7 +7,7 @@
 //
 
 #import "WaveViewController.h"
-
+#import "ZJChartHeader.h"
 @interface WaveViewController ()
 
 @end
@@ -16,6 +16,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"波浪";
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    ZJWaveView *waveView = [[ZJWaveView alloc] initWithFrame:CGRectMake(0, 64, 300, 300)];
+    [self.view addSubview:waveView];
     // Do any additional setup after loading the view.
 }
 

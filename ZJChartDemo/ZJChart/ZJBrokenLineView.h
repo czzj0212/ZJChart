@@ -7,20 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SaleDataModel.h"
-@class ZJBrokenLineView;
 #import "BrokenLineModel.h"
+@class ZJBrokenLineView;
 #pragma mark - 数据源
 @protocol ZJBrokenLineDataSource <NSObject>
 
-/*
- 数据源 日期
- */
-
-- (NSString *)monthStringOfZJBrokenLineView:(ZJBrokenLineView *)brokenLineView;
 
 /*
- 数据源 NSArray Y轴数据
+ 数据源 
  */
 - (BrokenLineModel *)yDataModelOfZJBrokenLineView:(ZJBrokenLineView *)brokenLineView;
 

@@ -7,7 +7,9 @@
 //
 
 #import "ViewController.h"
-
+#import "BrokenLineViewController.h"
+#import "RingChartViewController.h"
+#import "WaveViewController.h"
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property(nonatomic, strong) UITableView *tableView;
@@ -18,10 +20,11 @@
 @implementation ViewController
 
 - (void)viewDidLoad {
-    
-    [super viewDidLoad];
-    _dataArray = @[@"折线图",@"环形图",@"波浪"];
 
+    [super viewDidLoad];
+    self.title = @"ZJChart";
+    _dataArray = @[@"折线图",@"环形图",@"波浪"];
+    [self.view addSubview:self.tableView];
 }
 
 
@@ -65,11 +68,14 @@
 
     if (indexPath.row == 0) {
         
-        
+        BrokenLineViewController *brokenVC = [[BrokenLineViewController alloc] init];
+        [self.navigationController pushViewController:brokenVC animated:YES];
     }else if (indexPath.row == 1) {
-    
+        RingChartViewController *ringVC = [[RingChartViewController alloc] init];
+        [self.navigationController pushViewController:ringVC animated:YES];
     }else if (indexPath.row == 2) {
-        
+        WaveViewController *waveVC = [[WaveViewController alloc] init];
+        [self.navigationController pushViewController:waveVC animated:YES];
     }
 
 }

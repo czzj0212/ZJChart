@@ -72,6 +72,7 @@
 		9D2F176C1E95F5890079FC83 /* WaveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaveViewController.m; sourceTree = "<group>"; };
 		9D2F176E1E95F59D0079FC83 /* RingChartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingChartViewController.h; sourceTree = "<group>"; };
 		9D2F176F1E95F59D0079FC83 /* RingChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RingChartViewController.m; sourceTree = "<group>"; };
+		9D2F17711E9606AC0079FC83 /* ZJChartHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJChartHeader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +175,7 @@
 				9D2F175F1E95EF550079FC83 /* ZJRingView.m */,
 				9D2F17601E95EF550079FC83 /* ZJWaveView.h */,
 				9D2F17611E95EF550079FC83 /* ZJWaveView.m */,
+				9D2F17711E9606AC0079FC83 /* ZJChartHeader.h */,
 			);
 			path = ZJChart;
 			sourceTree = "<group>";

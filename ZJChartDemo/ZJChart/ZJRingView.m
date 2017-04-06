@@ -39,7 +39,7 @@ static  CGFloat drawAnimaTime = 1.0;
     if (self) {
         
         self.chartOrigin = CGPointMake(CGRectGetWidth(self.frame) / 2, CGRectGetHeight(self.frame)/2);
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor colorWithRed:90/255.0 green:52/255.0 blue:154/255.0 alpha:1];
         self.minRingWidth = frame.size.height / 8;
         self.redius = frame.size.height / 4 + self.minRingWidth / 2;
         self.ringSpace = 2.0;
@@ -71,7 +71,7 @@ static  CGFloat drawAnimaTime = 1.0;
         [_noDataButton setTitle:@"暂无数据" forState:UIControlStateNormal];
         [_noDataButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _noDataButton.titleLabel.font = [UIFont systemFontOfSize:14.7 weight:UIFontWeightLight];
-        _noDataButton.center = CGPointMake(self.width / 2.0, self.height *3/ 4.0);
+        _noDataButton.center = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height *3/ 4.0);
         [_noDataButton addTarget:self action:@selector(noDataButtonAction) forControlEvents:UIControlEventTouchUpInside];
         _noDataButton.hidden = YES;
         [self addSubview:_noDataButton];
