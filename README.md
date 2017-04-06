@@ -6,7 +6,7 @@
 
  ![image](https://github.com/czzj0212/ZJChart/tree/master/images/linegif1.gif)
  
- ![iamge](https://github.com/czzj0212/ZJChart/tree/master/images/linegif2.gif)
+ ![image](https://github.com/czzj0212/ZJChart/tree/master/images/linegif2.gif)
  
  ![image](https://github.com/czzj0212/ZJChart/tree/master/images/linegif3.gif)
 
