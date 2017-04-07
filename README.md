@@ -6,9 +6,9 @@
 
  ![image](./images/linegif1.gif)
  
- ![image](https://github.com/czzj0212/ZJChart/tree/master/images/linegif2.gif)
+ ![image](./images/linegif2.gif)
  
- ![image](https://github.com/czzj0212/ZJChart/tree/master/images/linegif3.gif)
+ ![image](./images/linegif3.gif)
 
 
 
